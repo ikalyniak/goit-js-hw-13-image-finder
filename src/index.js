@@ -5,80 +5,61 @@ import '@pnotify/core/dist/Material.css';
 import '@pnotify/core/dist/PNotify.css';
 import { alert, error } from '@pnotify/core';
 
-import debounce from 'lodash.debounce';
+import getRefs from './js/getRefs.js';
+import LoadMoreBtn from './js/components/load-more-btn.js';
+import PixabayApiService from './js/apiService.js';
 
-import fetchCountries from './js/fetchCountries';
-import getRefs from './js/getRefs';
-
-import countryTemplate from './templates/country.hbs';
-import countriesTemplate from './templates/countries.hbs';
+import imageTemplate from './templates/image.hbs';
 
 const refs = getRefs();
 
-refs.input.addEventListener('input', debounce(onInput, 500));
-refs.button.addEventListener('click', onClickClear);
+const pixabayApiService = new PixabayApiService();
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]', // потому что в class LoadMoreBtn есть деструктуризация
+  hidden: true,
+});
 
-function onInput(event) {
-  fetchCountries(event.target.value).then(render).catch(onFetchError);
-}
+refs.searchForm.addEventListener('submit', onSearch);
+loadMoreBtn.refs.button.addEventListener('click', fetchImages);
 
-function render(data) {
-  if (data.length === 1) {
-    renderCountryCard(data);
-  } else if (data.length > 1 && data.length <= 10) {
-    renderCountriesList(data);
-  } else {
-    clearMarkup();
-    alert({
-      // type: 'error',
-      text: 'Too many matches found! Please enter a more specific query!',
-      delay: '1000',
-      maxTextHeight: null,
-      width: '320px',
-    });
+function onSearch(event) {
+  event.preventDefault();
+
+  pixabayApiService.query = event.currentTarget.elements.query.value;
+
+  if (pixabayApiService.query === '') {
+    return alert('Type your query...');
   }
+
+  loadMoreBtn.show();
+  pixabayApiService.resetPage();
+  clearGallery();
+  fetchImages();
 }
 
-function renderCountryCard(country) {
-  // console.log('это then');
-  const countryMarkup = countryTemplate(country);
-  refs.container.innerHTML = countryMarkup;
-}
-
-function renderCountriesList(countries) {
-  const countriesMarkup = countriesTemplate(countries);
-  refs.container.innerHTML = countriesMarkup;
-}
-
-function onClickCountryItem(event) {
-  console.log(event);
-}
-
-function onClickClear() {
-  refs.input.value = '';
-  clearMarkup();
-}
-
-function onFetchError(err) {
-  clearMarkup();
-  error({
-    text: `${err}`,
-    delay: '1000',
-    maxTextHeight: null,
-    width: '320px',
+function fetchImages() {
+  loadMoreBtn.disable();
+  pixabayApiService.fetchImages().then(images => {
+    // console.log(images);
+    if (images.hits.length === 0) {
+      loadMoreBtn.hide();
+      return error('Nothing found...');
+    }
+    appendImageCardMarkup(images);
+    loadMoreBtn.enable();
   });
-  // console.log('это ошибка');
-  // console.log(err);
+
+  // const element = document.getElementById('.gallery__item:last-child');
+  // element.scrollIntoView({
+  //   behavior: 'smooth',
+  //   block: 'end',
+  // });
 }
 
-function clearMarkup() {
-  refs.container.innerHTML = '';
+function appendImageCardMarkup(images) {
+  refs.gallery.insertAdjacentHTML('beforeend', imageTemplate(images));
 }
 
-/**
- * 1)
- *  .then(renderCountryCard) тоже самое (то есть сокращенный аналог)
- * что и   .then(country => renderCountryCard(country))
- * мы даем ссылку на эту функцию, чтобы она вызвалась тогда,
- *  когда придет ответ с сервера
- */
+function clearGallery() {
+  refs.gallery.innerHTML = '';
+}
