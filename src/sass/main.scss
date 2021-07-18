@@ -36,16 +36,25 @@ li {
 }
 
 .gallery__item {
-  width: 380px;
+  // width: 380px;
+  // height: 280px;
   margin-bottom: 15px;
   margin-top: 15px;
   border-radius: 2px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
-.gallery__img {
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 380px;
-  height: 250px;
+  height: 280px;
+}
+.gallery__img {
+  display: block;
+  width: 380px;
+  // height: 250px;
 }
 
 .stats {
@@ -81,7 +90,7 @@ li {
 
 .button-css {
   cursor: pointer;
-  margin-bottom: 35px;
+  // margin-bottom: 35px;
   padding: 0 40px;
   height: 40px;
   border-radius: 10px;
@@ -115,6 +124,7 @@ li {
 }
 
 .buttons {
+  min-height: 1px;
   display: flex;
   justify-content: center;
 

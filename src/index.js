@@ -69,7 +69,6 @@ function fetchImages() {
   });
 
   scroll();
-  // console.dir(scroll());
 }
 
 function appendImageCardMarkup(images) {
@@ -81,12 +80,14 @@ function clearGallery() {
 }
 
 function scroll() {
-  const anchor = document.querySelector('.buttons');
-  // console.log(anchor);
-  anchor.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
+  const anchor = document.getElementById('button');
+  console.log(anchor);
+  setTimeout(() => {
+    anchor.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  }, 300);
 }
 
 function onClear() {
