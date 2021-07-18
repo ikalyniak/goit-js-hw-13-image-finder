@@ -36,8 +36,6 @@ li {
 }
 
 .gallery__item {
-  // width: 380px;
-  // height: 280px;
   margin-bottom: 15px;
   margin-top: 15px;
   border-radius: 2px;
@@ -53,8 +51,8 @@ li {
 }
 .gallery__img {
   display: block;
-  width: 380px;
-  // height: 250px;
+  max-width: 380px;
+  max-height: 256px;
 }
 
 .stats {

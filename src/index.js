@@ -81,7 +81,7 @@ function clearGallery() {
 
 function scroll() {
   const anchor = document.getElementById('button');
-  console.log(anchor);
+  // console.log(anchor);
   setTimeout(() => {
     anchor.scrollIntoView({
       behavior: 'smooth',
