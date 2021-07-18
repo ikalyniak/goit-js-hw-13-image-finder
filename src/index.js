@@ -31,12 +31,18 @@ function onSearch(event) {
   pixabayApiService.query = event.currentTarget.elements.query.value;
 
   if (pixabayApiService.query === '') {
-    return alert('Type your query...');
+    return alert({
+      text: 'Type your query...',
+      delay: '1000',
+    });
   }
 
   if (pixabayApiService.query.trim() === '') {
     refs.input.value = '';
-    return alert('Type your query...');
+    return alert({
+      text: 'Type your query...',
+      delay: '1000',
+    });
   }
 
   loadMoreBtn.show();
@@ -52,7 +58,11 @@ function fetchImages() {
     // console.log(images);
     if (images.hits.length === 0) {
       loadMoreBtn.hide();
-      return error('Nothing found...');
+      return error({
+        text: 'Nothing found...',
+        type: 'info',
+        delay: '1000',
+      });
     }
     appendImageCardMarkup(images);
     loadMoreBtn.enable();
