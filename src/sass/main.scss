@@ -100,8 +100,10 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
+}
+
+.button:not(:last-child) {
+  margin-right: 20px;
 }
 
 .button.is-hidden {
@@ -109,5 +111,17 @@ li {
 }
 
 .button > .spinner.is-hidden {
+  display: none;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.clear.is-hidden {
   display: none;
 }

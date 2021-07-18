@@ -8,10 +8,9 @@ export default class PixabayApiService {
   }
 
   fetchImages() {
-    // console.log(this);
     const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
 
-    return fetch(url) // return чтобы вернуть промис во внешний код
+    return fetch(url)
       .then(response => {
         // console.log(response);
         if (!response.ok) {
@@ -21,10 +20,8 @@ export default class PixabayApiService {
         return response.json();
       })
       .then(({ hits }) => {
-        // деструктуризируем data (чтобы не возвращать data.articles)
-        // console.log(data);
         this.incrementPage();
-        return { hits }; // return чтобы вернуть данные (результат колбека) во внешний код
+        return { hits };
       });
   }
 

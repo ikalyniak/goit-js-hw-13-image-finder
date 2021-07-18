@@ -21,6 +21,9 @@ const loadMoreBtn = new LoadMoreBtn({
 
 refs.searchForm.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', fetchImages);
+refs.clearButton.addEventListener('click', onClear);
+
+// console.log(loadMoreBtn.refs.button);
 
 function onSearch(event) {
   event.preventDefault();
@@ -31,7 +34,13 @@ function onSearch(event) {
     return alert('Type your query...');
   }
 
+  if (pixabayApiService.query.trim() === '') {
+    refs.input.value = '';
+    return alert('Type your query...');
+  }
+
   loadMoreBtn.show();
+  refs.clearButton.classList.remove('is-hidden');
   pixabayApiService.resetPage();
   clearGallery();
   fetchImages();
@@ -49,11 +58,8 @@ function fetchImages() {
     loadMoreBtn.enable();
   });
 
-  // const element = document.getElementById('.gallery__item:last-child');
-  // element.scrollIntoView({
-  //   behavior: 'smooth',
-  //   block: 'end',
-  // });
+  scroll();
+  console.dir(scroll());
 }
 
 function appendImageCardMarkup(images) {
@@ -62,4 +68,18 @@ function appendImageCardMarkup(images) {
 
 function clearGallery() {
   refs.gallery.innerHTML = '';
+}
+
+function scroll() {
+  loadMoreBtn.refs.button.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+}
+
+function onClear() {
+  refs.gallery.innerHTML = '';
+  loadMoreBtn.hide();
+  refs.input.value = '';
+  refs.clearButton.classList.add('is-hidden');
 }
