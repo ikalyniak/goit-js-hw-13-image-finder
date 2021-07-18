@@ -69,7 +69,7 @@ function fetchImages() {
   });
 
   scroll();
-  console.dir(scroll());
+  // console.dir(scroll());
 }
 
 function appendImageCardMarkup(images) {
@@ -81,7 +81,9 @@ function clearGallery() {
 }
 
 function scroll() {
-  loadMoreBtn.refs.button.scrollIntoView({
+  const anchor = document.querySelector('.buttons');
+  // console.log(anchor);
+  anchor.scrollIntoView({
     behavior: 'smooth',
     block: 'end',
   });

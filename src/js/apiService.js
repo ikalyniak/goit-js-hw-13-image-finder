@@ -7,22 +7,37 @@ export default class PixabayApiService {
     this.page = 1;
   }
 
-  fetchImages() {
+  async fetchImages() {
     const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
 
-    return fetch(url)
-      .then(response => {
-        // console.log(response);
-        if (!response.ok) {
-          throw Error(`Something went wrong`);
-        }
+    try {
+      const response = await fetch(url);
+      const { hits } = await response.json();
+      // console.log({ hits });
 
-        return response.json();
-      })
-      .then(({ hits }) => {
-        this.incrementPage();
-        return { hits };
-      });
+      //посмотреть что возвращает response.json() и деструктуризировать
+      // const a = await response.json();
+      // console.log(a);
+
+      this.incrementPage();
+      return { hits };
+    } catch {
+      throw Error(`Something went wrong`);
+    }
+
+    // return fetch(url)
+    //   .then(response => {
+    //     // console.log(response);
+    //     if (!response.ok) {
+    //       throw Error(`Something went wrong`);
+    //     }
+
+    //     return response.json();
+    //   })
+    //   .then(({ hits }) => {
+    //     this.incrementPage();
+    //     return { hits };
+    //   });
   }
 
   incrementPage() {
